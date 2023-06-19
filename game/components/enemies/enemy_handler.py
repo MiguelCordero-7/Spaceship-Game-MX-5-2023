@@ -3,6 +3,7 @@ from game.components.enemies.ship import Ship, Speedship
 class EnemyHandler:
     def __init__(self):
         self.enemies = []
+        self.spawn_speedships = False
 
     def update(self):
         self.add_enemy()
@@ -16,12 +17,16 @@ class EnemyHandler:
             enemy.draw(screen)
 
     def add_enemy(self):
-        if len (self.enemies) < 7:
-            self.enemies.append(Ship())
-        if len (self.enemies) == 7 and len (self.enemies) <= 11 :
-            self.enemies.append(Speedship())
-            
-    
+        if not self.spawn_speedships:
+            if len(self.enemies) < 5:
+                self.enemies.append(Ship())
+            elif len(self.enemies) == 5:
+                self.enemies.extend([Speedship() for _ in range(4)])
+                self.spawn_speedships = True
 
     def remove_enemy(self, enemy):
         self.enemies.remove(enemy)
+        if isinstance(enemy, Ship):
+            self.enemies = [e for e in self.enemies if not isinstance(e, Ship)]  # Eliminar todas las naves Ship
+        elif isinstance(enemy, Speedship):
+            self.spawn_speedships = False 

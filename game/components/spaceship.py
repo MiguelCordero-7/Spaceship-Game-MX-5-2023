@@ -9,7 +9,7 @@ class Spaceship:
 
     def __init__(self):
         self.image = SPACESHIP
-        self.image = pygame.transform.scale(self.image, (self.WIDTH, self.WIDTH))
+        self.image = pygame.transform.scale(self.image, (self.WIDTH, self.HEIGTH))
         self.rect = self.image.get_rect()
         self.rect.x = self.X_POS
         self.rect.y = self.Y_POS
