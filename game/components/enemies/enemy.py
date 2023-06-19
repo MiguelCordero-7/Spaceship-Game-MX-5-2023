@@ -4,8 +4,8 @@ from game.utils.constants import SCREEN_WIDTH,SCREEN_HEIGHT, LEFT, RIGTH
 class Enemy:
     Y_POS = 0
     X_POS_LIST = [50,150, 250, 350, 450, 550, 650, 750, 850, 950]
-    SPEED_Y = 3
-    SPEED_X = 2
+    SPEED_Y = 2
+    SPEED_X = 3
     MOV_X = [LEFT, RIGTH]
     INTERVAL = 100
     
