@@ -1,14 +1,15 @@
-from game.components.enemies.ship import Ship, Speedship
+from game.components.enemies.ship import Ship
+from game.components.enemies.speedship import Speedship
 
 class EnemyHandler:
     def __init__(self):
         self.enemies = []
         self.spawn_speedships = False
 
-    def update(self):
+    def update(self, bullet_handler):
         self.add_enemy()
         for enemy in self.enemies:
-            enemy.update()
+            enemy.update(bullet_handler)
             if not enemy.is_alive:
                 self.remove_enemy(enemy)
 
@@ -27,6 +28,6 @@ class EnemyHandler:
     def remove_enemy(self, enemy):
         self.enemies.remove(enemy)
         if isinstance(enemy, Ship):
-            self.enemies = [e for e in self.enemies if not isinstance(e, Ship)]  # Eliminar todas las naves Ship
+            self.enemies = [e for e in self.enemies if not isinstance(e, Ship)]  
         elif isinstance(enemy, Speedship):
             self.spawn_speedships = False 
