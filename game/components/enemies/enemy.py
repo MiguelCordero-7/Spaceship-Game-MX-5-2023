@@ -9,7 +9,7 @@ class Enemy:
     MOV_X = [LEFT, RIGTH]
     INTERVAL = 100
     SHOOTING_TIME = 30
-    
+
     def __init__(self, image):
         self.image = image
         self.rect = self.image.get_rect()
