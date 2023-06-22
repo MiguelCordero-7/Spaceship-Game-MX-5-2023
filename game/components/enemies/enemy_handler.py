@@ -1,15 +1,22 @@
+import random
 from game.components.enemies.ship import Ship
 from game.components.enemies.speedship import Speedship
+from game.utils.constants import ENEMY_1, ENEMY_2
 
 class EnemyHandler:
+
+    ENEMIES = ["ship", "speedship"]
+
     def __init__(self):
         self.enemies = []
-        self.spawn_speedships = False
+        self.number_enemies_destroyed = 0
 
     def update(self, bullet_handler):
         self.add_enemy()
         for enemy in self.enemies:
             enemy.update(bullet_handler)
+            if enemy.is_destroyed:
+                self.number_enemies_destroyed += 1
             if not enemy.is_alive:
                 self.remove_enemy(enemy)
 
@@ -18,16 +25,16 @@ class EnemyHandler:
             enemy.draw(screen)
 
     def add_enemy(self):
-        if not self.spawn_speedships:
-            if len(self.enemies) < 5:
+        if len(self.enemies) <= 4:
+            new_enemy = random.choice(self.ENEMIES)
+            if new_enemy == "ship":
                 self.enemies.append(Ship())
-            elif len(self.enemies) == 5:
-                self.enemies.extend([Speedship() for _ in range(4)])
-                self.spawn_speedships = True
+            elif new_enemy == "speedship":
+                self.enemies.append(Speedship())  
 
     def remove_enemy(self, enemy):
         self.enemies.remove(enemy)
-        if isinstance(enemy, Ship):
-            self.enemies = [e for e in self.enemies if not isinstance(e, Ship)]  
-        elif isinstance(enemy, Speedship):
-            self.spawn_speedships = False 
+
+    def reset(self):
+        self.enemies = []
+        self.number_enemies_destroyed = 0
