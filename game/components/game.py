@@ -4,6 +4,7 @@ from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, F
 from game.components.spaceship import Spaceship
 from game.components.enemies.enemy_handler import EnemyHandler
 from game.components.bullets.bullet_handler import BulletHandler
+from game.components.power_up.power_up_handler import PowerUpHandler
 from game.utils import text_utils
 
 class Game:
@@ -21,6 +22,7 @@ class Game:
         self.player = Spaceship()
         self.enemy_handler = EnemyHandler()
         self.bullet_handler = BulletHandler()
+        self.power_up_handler = PowerUpHandler()
         self.number_death = 0
         self.score = 0
         self.game_count = 0
@@ -45,11 +47,11 @@ class Game:
             elif event.type == pygame.KEYDOWN and not self.playing:
                 self.playing = True
                 self.reset()
-            if not self.playing:
                 if self.number_death > 0:
                     self.game_count += 1
-                self.playing = True
-                self.reset()
+
+
+
 
     def update(self):
         if self.playing:
@@ -57,6 +59,7 @@ class Game:
             self.player.update(user_input, self.bullet_handler)
             self.enemy_handler.update(self.bullet_handler)
             self.bullet_handler.update(self.player, self.enemy_handler.enemies)
+            self.power_up_handler.update(self.player)
             self.score = self.enemy_handler.number_enemies_destroyed
             if not self.player.is_alive:
                 pygame.time.delay(300)
@@ -64,13 +67,13 @@ class Game:
                 self.number_death += 1
 
     def draw(self):
+        self.draw_background()
         if self.playing:
             self.clock.tick(FPS)
-            self.screen.fill((255, 255, 255))
-            self.draw_background()
             self.player.draw(self.screen)
             self.enemy_handler.draw(self.screen)
             self.bullet_handler.draw(self.screen)
+            self.power_up_handler.draw(self.screen)
             self.draw_score()
         else:
             self.draw_menu()
@@ -89,10 +92,10 @@ class Game:
 
     def draw_menu(self):
         if self.number_death == 0:
-            text, text_rect = text_utils.get_message("prees any key to start", 30, WHITE_COLOR)
+            text, text_rect = text_utils.get_message("press any key to start", 30, WHITE_COLOR)
             self.screen.blit(text, text_rect)
         else: 
-            text, text_rect = text_utils.get_message("prees any key to Restart", 30, WHITE_COLOR)
+            text, text_rect = text_utils.get_message("press any key to Restart", 30, WHITE_COLOR)
             score, score_rect = text_utils.get_message(f"your score is: {self.score}", 30, WHITE_COLOR, height=SCREEN_HEIGHT//2 + 50)
             record_score, record_score_rect = text_utils.get_message(f"Record score: {self.record_score}", 30, WHITE_COLOR, height=SCREEN_HEIGHT//2 + 150)
             self.screen.blit(text, text_rect)
@@ -113,3 +116,4 @@ class Game:
         self.enemy_handler.reset()
         self.bullet_handler.reset()
         self.score = 0
+        self.power_up_handler.reset()

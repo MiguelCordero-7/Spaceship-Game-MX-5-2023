@@ -25,8 +25,8 @@ class BossEnemy(Enemy):
         super().update(bullet_handler)
         if len(bullet_handler.bullets) >= 50:
             self.is_alive = False
-
-
+            return
+        
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
